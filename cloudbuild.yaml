@@ -16,23 +16,5 @@ steps:
   env:
   - 'CLOUDSDK_COMPUTE_REGION=us-central1'
   - 'CLOUDSDK_CONTAINER_CLUSTER=application-cluster'
-steps:
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/$PROJECT_ID/my-app:latest', '.']
-
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/$PROJECT_ID/my-app:latest']
-
-- name: 'gcr.io/cloud-builders/kubectl'
-  args: ['apply', '-f', 'k8/deployment.yaml']
-  env:
-  - 'CLOUDSDK_COMPUTE_REGION=us-central1'
-  - 'CLOUDSDK_CONTAINER_CLUSTER=application-cluster'
-
-- name: 'gcr.io/cloud-builders/kubectl'
-  args: ['apply', '-f', 'k8/service.yaml']
-  env:
-  - 'CLOUDSDK_COMPUTE_REGION=us-central1'
-  - 'CLOUDSDK_CONTAINER_CLUSTER=application-cluster'
 options:
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
