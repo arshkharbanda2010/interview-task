@@ -6,13 +6,13 @@ steps:
   args: ['push', 'gcr.io/interview-project-442915/python-hello-world:latest']
 
 - name: 'gcr.io/cloud-builders/kubectl'
-  args: ['apply', '-f', 'k8s/deployment.yaml']
+  args: ['apply', '-f', 'k8/deployment.yaml']
   env:
   - 'CLOUDSDK_COMPUTE_REGION=us-central1'
   - 'CLOUDSDK_CONTAINER_CLUSTER=application-cluster'
 
 - name: 'gcr.io/cloud-builders/kubectl'
-  args: ['apply', '-f', 'k8s/service.yaml']
+  args: ['apply', '-f', 'k8/service.yaml']
   env:
   - 'CLOUDSDK_COMPUTE_REGION=us-central1'
   - 'CLOUDSDK_CONTAINER_CLUSTER=application-cluster'
