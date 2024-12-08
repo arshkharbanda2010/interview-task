@@ -18,13 +18,13 @@ steps:
 # Step 4: Commit the updated manifest back to GitHub
 - name: 'gcr.io/cloud-builders/git'
   entrypoint: 'bash'
-  secretEnv: ['GITHUB_PAT']
+  # secretEnv: ['GITHUB_PAT']
   args:
   - '-c'
   - |
     git config --global user.email "arsh.kharbanda2010@gmail.com"
     git config --global user.name "arshkharbanda2010"
-    git remote set-url origin https://$GITHUB_PAT@github.com/arshkharbanda2010/interview-task.git
+    git remote set-url origin https://arshkharbanda2011@github.com/arshkharbanda2010/interview-task.git
     git add k8/deployment.yaml
     git commit -m "Update image tag to $SHORT_SHA"
     git push origin master
@@ -34,8 +34,8 @@ substitutions:
 
 timeout: 1200s
 
-secrets:
-- secretEnv:
-    GITHUB_PAT: projects/interview-project-442915/secrets/GITHUB_PAT/versions/latest
+# secrets:
+# - secretEnv:
+#     GITHUB_PAT: projects/interview-project-442915/secrets/GITHUB_PAT/versions/latest
 options:
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
