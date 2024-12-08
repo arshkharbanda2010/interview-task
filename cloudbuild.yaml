@@ -1,11 +1,11 @@
 steps:
 # Step 1: Build the Docker image
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'arshkharbanda2011/python-hello-world:$SHORT_SHA', '.']
+  args: ['build', '-t', 'gcr.io/interview-project-442915/python-hello-world:$SHORT_SHA', '.']
 
-# Step 2: Push the Docker image to Docker Hub
+# Step 2: Push the Docker image to GCR
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'arshkharbanda2011/python-hello-world:$SHORT_SHA']
+  args: ['push', 'gcr.io/interview-project-442915/python-hello-world:$SHORT_SHA']
 
 # Step 3: Update the Kubernetes manifest with the new image tag
 - name: 'ubuntu'
@@ -13,7 +13,7 @@ steps:
   args:
   - '-c'
   - |
-    sed -i "s|image: arshkharbanda2011/python-hello-world:.*|image: arshkharbanda2011/python-hello-world:$SHORT_SHA|" k8/deployment.yaml
+    sed -i "s|image: gcr.io/interview-project-442915/python-hello-world:.*|image: gcr.io/interview-project-442915/python-hello-world:$SHORT_SHA|" k8/deployment.yaml
 
 # Step 4: Commit the updated manifest back to GitHub
 - name: 'gcr.io/cloud-builders/git'
@@ -27,10 +27,10 @@ steps:
     git commit -m "Update image tag to $SHORT_SHA"
     git push origin main
 
-# Optional: Trigger ArgoCD sync (if desired and permissions allow)
-# Uncomment this step to force an immediate sync with ArgoCD
+# Step 5 (Optional): Trigger ArgoCD sync via API
 # - name: 'curlimages/curl'
 #   entrypoint: 'bash'
+#   secretEnv: ['ARGOCD_TOKEN']
 #   args:
 #   - '-c'
 #   - |
@@ -42,5 +42,8 @@ substitutions:
   _SHORT_SHA: $SHORT_SHA
 
 timeout: 1200s
-options:
-  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
+
+# secrets:
+# - kmsKeyName: projects/interview-project-442915/locations/global/keyRings/<key-ring-name>/cryptoKeys/<key-name>
+#   secretEnv:
+#     ARGOCD_TOKEN: projects/interview-project-442915/secrets/ARGOCD_TOKEN/versions/latest
