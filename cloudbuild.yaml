@@ -28,29 +28,14 @@ steps:
     git add k8/deployment.yaml
     git commit -m "Update image tag to $SHORT_SHA"
     git push origin master
-# master branch added
-
-# Step 5 (Optional): Trigger ArgoCD sync via API
-# - name: 'curlimages/curl'
-#   entrypoint: 'bash'
-#   secretEnv: ['ARGOCD_TOKEN']
-#   args:
-#   - '-c'
-#   - |
-#     curl -X POST -H "Authorization: Bearer $ARGOCD_TOKEN" \
-#          -H "Content-Type: application/json" \
-#          https://argocd-server-url/api/v1/applications/python-hello-world/sync
 
 substitutions:
   _SHORT_SHA: $SHORT_SHA
 
 timeout: 1200s
+
+secrets:
+- secretEnv:
+    GITHUB_PAT: projects/interview-project-442915/secrets/GITHUB_PAT/versions/latest
 options:
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
-# secrets:
-# - kmsKeyName: projects/interview-project-442915/locations/global/keyRings/<key-ring-name>/cryptoKeys/<key-name>
-#   secretEnv:
-#     ARGOCD_TOKEN: projects/interview-project-442915/secrets/ARGOCD_TOKEN/versions/latest
-secrets:
-  secretEnv:
-    GITHUB_PAT: projects/interview-project-442915/secrets/GITHUB_PAT/versions/latest
