@@ -42,7 +42,8 @@ substitutions:
   _SHORT_SHA: $SHORT_SHA
 
 timeout: 1200s
-
+options:
+  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
 # secrets:
 # - kmsKeyName: projects/interview-project-442915/locations/global/keyRings/<key-ring-name>/cryptoKeys/<key-name>
 #   secretEnv:
