@@ -15,16 +15,20 @@ steps:
   - |
     sed -i "s|image: gcr.io/interview-project-442915/python-hello-world:.*|image: gcr.io/interview-project-442915/python-hello-world:$SHORT_SHA|" k8/deployment.yaml
 
-# Step 4: Commit the updated manifest back to GitHub
+# Step 4: Authenticate with GitHub using SSH
 - name: 'gcr.io/cloud-builders/git'
   entrypoint: 'bash'
-  secretEnv: ['GITHUB_PAT']
+  secretEnv: ['GITHUB_SSH_KEY']
   args:
   - '-c'
   - |
+    mkdir -p ~/.ssh
+    echo "$GITHUB_SSH_KEY" > ~/.ssh/id_rsa
+    chmod 600 ~/.ssh/id_rsa
+    ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
     git config --global user.email "arsh.kharbanda2010@gmail.com"
     git config --global user.name "arshkharbanda2010"
-    git remote set-url origin https://$GITHUB_PAT@github.com/arshkharbanda2010/interview-task.git
+    git remote set-url origin git@github.com:arshkharbanda2010/interview-task.git
     git add k8/deployment.yaml
     git commit -m "Update image tag to $SHORT_SHA"
     git push origin master
@@ -34,8 +38,8 @@ substitutions:
 
 timeout: 1200s
 
-secrets:
-- secretEnv:
-    GITHUB_PAT: projects/interview-project-442915/secrets/GITHUB_PAT/versions/latest
 options:
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
+secrets:
+- secretEnv:
+    GITHUB_SSH_KEY: projects/interview-project-442915/secrets/GITHUB_SSH_KEY/versions/latest
