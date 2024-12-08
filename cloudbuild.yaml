@@ -26,6 +26,7 @@ steps:
     git add k8/deployment.yaml
     git commit -m "Update image tag to $SHORT_SHA"
     git push origin master
+# master branch added
 
 # Step 5 (Optional): Trigger ArgoCD sync via API
 # - name: 'curlimages/curl'
