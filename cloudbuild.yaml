@@ -52,6 +52,5 @@ options:
 #   secretEnv:
 #     ARGOCD_TOKEN: projects/interview-project-442915/secrets/ARGOCD_TOKEN/versions/latest
 secrets:
-- kmsKeyName: projects/interview-project-442915/locations/us-central1/keyRings/test-key/cryptoKeys/test-key
   secretEnv:
     GITHUB_PAT: projects/interview-project-442915/secrets/GITHUB_PAT/versions/latest
