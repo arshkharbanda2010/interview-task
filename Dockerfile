@@ -5,7 +5,7 @@ FROM python:3.9-slim
 WORKDIR /app
 
 # Copy the application files
-COPY k8/app.py .
+COPY app.py .
 COPY requirements.txt .
 
 # Install Python dependencies

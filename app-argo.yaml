@@ -4,7 +4,7 @@ metadata:
   name: python-hello-world
   namespace: argocd
 spec:
-  project: default  # Add this line
+  project: default
   destination:
     server: https://kubernetes.default.svc
     namespace: default

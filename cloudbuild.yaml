@@ -1,20 +1,46 @@
 steps:
+# Step 1: Build the Docker image
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/interview-project-442915/python-hello-world:latest', '.']
+  args: ['build', '-t', 'arshkharbanda2011/python-hello-world:$SHORT_SHA', '.']
 
+# Step 2: Push the Docker image to Docker Hub
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/interview-project-442915/python-hello-world:latest']
+  args: ['push', 'arshkharbanda2011/python-hello-world:$SHORT_SHA']
 
-- name: 'gcr.io/cloud-builders/kubectl'
-  args: ['apply', '-f', 'k8/deployment.yaml']
-  env:
-  - 'CLOUDSDK_COMPUTE_REGION=us-central1'
-  - 'CLOUDSDK_CONTAINER_CLUSTER=application-cluster'
+# Step 3: Update the Kubernetes manifest with the new image tag
+- name: 'ubuntu'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    sed -i "s|image: arshkharbanda2011/python-hello-world:.*|image: arshkharbanda2011/python-hello-world:$SHORT_SHA|" k8/deployment.yaml
 
-- name: 'gcr.io/cloud-builders/kubectl'
-  args: ['apply', '-f', 'k8/service.yaml']
-  env:
-  - 'CLOUDSDK_COMPUTE_REGION=us-central1'
-  - 'CLOUDSDK_CONTAINER_CLUSTER=application-cluster'
+# Step 4: Commit the updated manifest back to GitHub
+- name: 'gcr.io/cloud-builders/git'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    git config --global user.email "arsh.kharbanda2010@gmail.com"
+    git config --global user.name "Arshdeep Singh"
+    git add k8/deployment.yaml
+    git commit -m "Update image tag to $SHORT_SHA"
+    git push origin main
+
+# Optional: Trigger ArgoCD sync (if desired and permissions allow)
+# Uncomment this step to force an immediate sync with ArgoCD
+# - name: 'curlimages/curl'
+#   entrypoint: 'bash'
+#   args:
+#   - '-c'
+#   - |
+#     curl -X POST -H "Authorization: Bearer $ARGOCD_TOKEN" \
+#          -H "Content-Type: application/json" \
+#          https://argocd-server-url/api/v1/applications/python-hello-world/sync
+
+substitutions:
+  _SHORT_SHA: $SHORT_SHA
+
+timeout: 1200s
 options:
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET

@@ -2,6 +2,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: python-hello-world
+  labels:
+    app: python-hello-world
+  annotations:  # Add ArgoCD Image Updater annotations here
+    argocd-image-updater.argoproj.io/image-list: arshkharbanda2011/python-hello-world
+    argocd-image-updater.argoproj.io/python-hello-world.update-strategy: latest
 spec:
   replicas: 1
   selector:
@@ -14,7 +19,6 @@ spec:
     spec:
       containers:
       - name: python-hello-world
-        image: gcr.io/interview-project-442915/python-hello-world:latest
+        image: arshkharbanda2011/python-hello-world:latest  # Initial image reference
         ports:
         - containerPort: 8080
-##
