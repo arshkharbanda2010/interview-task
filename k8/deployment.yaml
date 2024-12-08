@@ -19,6 +19,6 @@ spec:
     spec:
       containers:
       - name: python-hello-world
-        image: gcr.io/interview-project-442915/python-hello-world:d97c76d
+        image: gcr.io/interview-project-442915/python-hello-world:cf37c7d
         ports:
         - containerPort: 8080
